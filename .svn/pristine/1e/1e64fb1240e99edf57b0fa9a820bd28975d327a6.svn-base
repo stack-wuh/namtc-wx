@@ -1,0 +1,136 @@
+*{
+  margin:0;
+  padding:0;
+}
+
+ul,li,dl,dd,dt{
+  list-style: none;
+}
+::-webkit-scrollbar{
+  display: none
+}
+html,body,#app{
+  width: 100%;
+  height:100%;
+  font:10px 'PingFang SC';
+  color: #333;
+  box-sizing: border-box;
+  background-color: #F9F9F9;
+}
+.father{
+  height:100%;
+  box-sizing: border-box;
+  background-color: #F9F9F9;
+}
+.empty{
+  height:60px;
+}
+.center{
+  margin:5px 0;
+  text-align:center;
+}
+.article-title{
+  font-family: 'PingFangSC-Semibold' !important;
+  font-weight: 400 !important;
+}
+
+.btn-next{
+  padding:.5em 0;
+  text-align: center;
+}
+/*图标*/
+.icon-search{
+  width:1.5em;
+  height:1.5em;
+  margin-right:1em;
+  vertical-align: middle;
+}
+.icon-clock{
+  width:1.5em;
+  height:1.5em;
+}
+.icon-title{
+  width:40px;
+  height:20px;
+}
+.icon-avatar-mini{
+  width:21px;
+  height:21px;
+  border-radius: 50%;
+}
+.icon-ok-mini{
+  width:11px;
+  height:11px;
+}
+
+img[alt="bg_share"]{
+  position: fixed;
+  left: 0;
+  top:0;
+  width:100%; 
+  height:100%;
+  z-index:10000;
+}
+img[alt="icon_visite"] ,
+img[alt='icon_ok'] ,
+img[alt='icon_like'],
+img[alt='icon_message']{
+  transform: scale3d(.7,.7,.7)
+}
+
+.bg_share{
+  position: fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  background:url('../../../static/imgs/bg_share.png') no-repeat no-repeat;
+  background-size: 100% 100%;
+  z-index:10000;
+}
+/* img[alt='ok']{
+  transform: 
+}
+img[alt="like"]{
+  width: 11px;
+  height:10px;
+}
+img[alt='message']{
+  width:12px;
+  height:11px;
+} */
+/*色彩*/
+.active{
+  font-weight: bold;
+  color: #1BBD9C !important;
+  border-bottom-color:#1BBD9C !important;
+}
+.info{
+  color: #A3A3A3;
+}
+.default{
+  color:#1BBD9C;
+}
+.art{
+  color:#B8B8B8;
+}
+.article-detail{
+  color: #b5b8ba;
+}
+.btn-list-color{
+  color: #b5b8ba;
+}
+/* 图片尺寸 */
+img[alt="search"]{
+  width:16px;
+  height:16px;
+}
+img[alt="choose"] ,
+img[alt="roof"]{
+  width:40px;
+  height:20px;
+}
+img[alt="share"]{
+  width:20px;
+  height:20px;
+}

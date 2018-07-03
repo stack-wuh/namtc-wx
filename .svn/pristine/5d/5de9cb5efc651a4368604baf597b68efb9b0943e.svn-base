@@ -1,0 +1,328 @@
+<template>
+  <section class="wrap">
+    <div style="height:120px;">
+      <swiper style="height:120px;" loop dots-position="center" 
+        auto show-desc-mask show-dots v-model="banner_id"
+         @on-index-change="handleClickChangeImg">
+        <swiper-item  class="swiper-item" v-for="(item,index) in banner" :key="index">
+          <img @click="jumpToOther(5,item)" :src="item.img">
+          <span class="item-title">{{item.title}}</span>
+        </swiper-item>
+      </swiper>
+    </div>
+    <nav class="top-nav">
+      <div>
+        <span @click="changeCategory(1)" v-bind:class="{'active':category === 1}">精选</span>
+        <span @click="changeCategory(2)" v-bind:class="{'active':category === 2}">关注</span>
+      </div>
+      <img @click="jumpToOther(3)" src="../../../static/img/icon-search@2x.png" alt="search" class="icon-search">
+    </nav>
+    <div style="height:45px;"></div>
+    <scroller class="my-scroll" lock-x scrollbar-y v-show="isShow" v-model="scrollerStatus" ref="scroller"
+              use-pullup :pullup-config="PullupConfig" @on-pullup-loading="selPullup">
+      <div>
+        <section class="item-list" v-for="(item,index) in article" :key="index">
+          <div class="item-top">
+            <span class="title">【{{item.type}}】</span>
+            <span @click="jumpToOther(2,item.type)" class="active">查看更多</span>
+          </div>
+          <article @click="jumpToOther(4,item)">
+            <span class="icon">
+                <img v-if="parseInt(item.is_roof)" src="../../../static/imgs/icon-roof.png" alt="roof">
+                <img v-if="parseInt(item.is_choice)" src="../../../static/imgs/icon-choose.png" alt="choose">
+            </span>
+            <p>{{item.title}}</p>
+            <p>{{item.content}}</p>
+            <p v-show="item.img">
+              <img class="item-img" :src="item.img">
+            </p>
+          </article>
+          <div class="btn-list">
+            <span><img src="../../../static/imgs/icon-visite.png" alt="visite"> {{item.browse}}</span>
+            <span><img src="../../../static/imgs/icon-ok-default.png" alt="ok"> {{item.praised}}</span>
+            <span><img src="../../../static/imgs/icon-like.png" alt="like"> {{item.follower}}</span>
+            <span><img src="../../../static/imgs/icon-messge.png" alt="message"> {{item.count}}</span>
+          </div>
+          <article @click="jumpToOther(4,subItem)"  v-for="(subItem) in item" >
+              <span class="icon">
+                  <img v-if="parseInt(subItem.is_roof)" src="../../../static/imgs/icon-roof.png" alt="roof">
+                  <img v-if="parseInt(subItem.is_choice)" src="../../../static/imgs/icon-choose.png" alt="choose">
+              </span>
+              <p class="article-title">{{subItem.title}}</p>
+              <p class="acticle-desc" style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;">{{subItem.content}}</p>
+              <div class="btn-list">
+                <span><img src="../../../static/imgs/icon-visite.png" alt="icon_visite"> {{subItem.browse}}</span>
+                <span><img src="../../../static/imgs/icon-ok-default.png" alt="icon_ok"> {{subItem.praised}}</span>
+                <span><img src="../../../static/imgs/icon-like.png" alt="icon_like"> {{subItem.follower}}</span>
+                <span><img src="../../../static/imgs/icon-message.png" alt="icon_message"> {{subItem.count}}</span>
+              </div>  
+         </article>          
+        </section>
+        <div style="height:10px;">
+           <p style="text-align:center;" v-if=" msgShow">没有更多啦...</p>
+        </div>
+      </div>
+    </scroller>
+        
+    <div class="empty"></div>
+    <bottom class="nav"></bottom>
+    <loading v-model="showLoading" :text="textLoading"></loading>
+  </section>
+</template>
+<script>
+  import {Tab, TabItem, Scroller, Loading,Swiper,SwiperItem} from 'vux'
+  import Bottom from '../common/bottom'
+
+  const PullupConfig = {
+    content: '上拉加载更多...',
+    pullUpHeight: 60,
+    height: 40,
+    autoRefresh: false,
+    downContent: '上拉加载更多...',
+    upContent: '上拉加载更多...',
+    loadingContent: '加载中...'
+  };
+  export default {
+    components: {
+      Tab,
+      TabItem,
+      Bottom,
+      Scroller,
+      Loading,
+      Swiper,
+      SwiperItem
+    },
+    touchStart(e){
+      if(e.touches.length == 1){
+        this.startY = e.touches[0].clientY
+        banner:[],
+        banner_id:0,
+        test:[
+          {
+            url:'javascript:',
+            img:'../../../static/img/clock.png',
+            title:'my-title'
+          },
+          {
+            url:'javascript:',
+            img:'../../../static/img/clock.png',
+            title:'my-title'
+          }
+        ]
+      }
+    },
+    computed:{
+      
+    },
+    methods: {
+      handleClickChangeImg(index){
+        this.banner_id = index
+      },
+      changeCategory(type) {
+        this.category = type;
+        this.page = 1;
+        this.msgShow = false;
+        this.scrollerStatus.pullupStatus = 'default';
+        this.getNewsList(true)
+      },
+
+      getNewsList(isEmpty) {
+        let _url = '';
+        _url = this.category === 1 ? 'Index/indexCho' : 'Index/indexFol';
+        this.showLoading = true;
+        this.apiPost(_url, {page: this.page}).then(res => {
+          const data = res.list;
+          this.list = res;
+          this.banner = res.banner
+          this.survey = res.is_survey;
+          if (isEmpty) {
+            this.article = [];
+            this.isShow = true
+          } else {
+            if (data && data.length === 0) {
+              this.msgShow = true;
+              this.showLoading = false;
+              this.scrollerStatus.pullupStatus = 'disabled';
+              return
+            }
+          }
+          this.list = [this.newArticle,this.question]
+          if(res.list.length == 10){
+            this.isShowMore = true
+          }else{
+            this.isShowMore = false
+          }
+          this.article = this.article.concat(data);
+
+          this.isShow = true;
+          this.showLoading = false;
+        })
+      },
+
+      selPullup() {
+        this.page++;
+        this.getNewsList(false)
+      },
+
+      jumpToOther(type, data) {
+        let path = '';
+        if (type === 1) {
+          path = 'question/list'
+        } else if (type === 2) {
+          if (data === '问题')
+            path = 'question';
+          else
+            path = 'article'
+        } else if (type === 3) {
+          path = 'index/search'
+        } else if (type === 4) {
+          if (data.type === '问题')
+            path = 'question/detail/' + data.id;
+          else
+            path = 'article/detail/' + data.id;
+        }else if(type == 5){
+          path = 'index/carousle/' + data.id
+        }
+      });
+    },
+
+    changeCategory(type) {
+      this.category = type;
+      this.article = [];
+      this.newArticle = []
+      this.question = []
+      this.page = 1
+      this.fetchData();
+    },
+          
+    jumpToOther(type, data) {
+      let path = "";
+      if (type === 1) {
+        path = "question/list";
+      } else if (type === 2) {
+        if (data === "问题") path = "question";
+        else path = "article";
+      } else if (type === 3) {
+        path = "index/search";
+      } else if (type === 4) {
+        if (data.type === "问题") path = "question/detail/" + data.id;
+        else path = "article/detail/" + data.id;
+      }
+      router.push(path);
+    },
+
+    mounted() {
+      this.getNewsList();
+      this.getFolloerClassify();
+      // this.$nextTick(() => {
+      //   this.$refs.scroller.reset()
+      // })
+    },
+    activated() {
+      // this.$refs.scroller.reset()
+    }
+  },
+  mounted() {
+    this.fetchData();
+    this.getFolloerClassify()
+  }
+};
+</script>
+
+<style scoped>
+  .wrap{
+    height:calc(100% - 55px);
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .my-scroll{
+    height:calc(100% - 120px) !important;
+  }
+  .tab-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    color: #1BBD9C;
+  }
+  to{
+    right:-12%;
+    color: #fff;
+    background-color: #1BBD9C;
+  }
+  .top-nav {
+    position: fixed;
+    top: 120px;
+    left: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 44px;
+    font-size: 1.6em;
+    background-color: #fff;
+    border-bottom: 1px solid #e6e6e6;
+    z-index: 10000;
+  }
+  to{
+    right:0;
+    background-color: #fff;
+    color: #1BBD9C;    
+  }
+}
+.trans-to-left{
+  animation: trans_to_left 1s ease forwards;
+}
+.trans-to-right{
+  animation: trans_to_right 1s ease forwards;
+}
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1000;
+}
+.center {
+  margin: 5px 0;
+  text-align: center;
+}
+.btn-list span {
+  display: flex;
+  align-items: center;
+  color: #b5b8ba;
+}
+.btn-list span img {
+  margin-right: 0.3em;
+}
+.btn-more{
+  color: #1BBD9C;
+}
+article{
+  margin-bottom:1em;
+}
+  .swiper-item{ 
+    position: relative;
+    width:100%;
+    height:100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .swiper-item img{
+    width:100%;
+    height:100%;
+  }
+  .swiper-item .item-title{
+    position: absolute;
+    bottom:70px;
+    left:15px;
+    text-align: center;
+    font-size: 20px;
+  }
+  img.item-img{
+    width:100%;
+    height:120px;
+  }
+</style>

@@ -1,0 +1,303 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import refresh from '@/components/refresh'
+
+import Home from '@/components/home'
+import Index from '@/components/index/index'
+import Floowers from '@/components/index/floower'
+import Remind from '@/components/index/remind'
+import Vip from '@/components/index/vip'
+import Apply from '@/components/index/apply'
+import Search from '@/components/index/search'
+import Carousle from '@/components/index/carousle'
+
+import ArticleIndex from '@/components/article/index'
+import ArticleDetail from '@/components/article/detail'
+import ArticleUser from '@/components/article/user'
+import ArticleList from '@/components/article/list'
+
+import Message from '@/components/message/message'
+import MessageIndex from '@/components/message/index'
+import MessageDetail from '@/components/message/detail'
+import MessageDatumDetail from '@/components/message/datum'
+
+import QuestionIndex from '@/components/question/index'
+import QuestionDetail from '@/components/question/detail'
+import QuestionList from '@/components/question/list'
+import QuestionEdit from '@/components/question/edit'
+
+import UserIndex from '@/components/user/index'
+import UserCenter from '@/components/user/center'
+
+import IntegralIndex from '@/components/integral/index'
+import InterDetail from '@/components/integral/detail'
+
+import LoadingFirst from '@/components/load/loadFirst'
+
+import QuizList from '@/components/quiz/list'
+import QuizEdit from '@/components/quiz/edit'
+
+import Pay from '@/components/common/pay'
+
+
+import scroll from '@/components/common/scroll'
+Vue.use(Router);
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      redirect: 'index'
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/refresh',
+          name: 'refresh',
+          component: refresh
+        },
+        {
+          path:'scroll',
+          name:'scroll',
+          component:scroll
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/loading/first',
+          name: 'first',
+          component: LoadingFirst
+        },
+        {
+          path: '/pay',
+          name: 'pay',
+          component: Pay
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: 'index',
+          name: 'index',
+          component: Index
+        },
+        {
+            path: '/',
+            name: 'home',
+            component: Home,
+            children: [
+                {
+                    path: 'index', 
+                    name: 'index',
+                    component: Index
+                },
+                {
+                    path: 'index/floower',
+                    name: 'floower',
+                    component: Floowers
+                },
+                {
+                    path: 'index/remind',
+                    name: 'remind',
+                    component: Remind
+                },
+                {
+                    path: 'index/vip',
+                    name: 'vip',
+                    component: Vip
+                },
+                {
+                    path: 'index/apply',
+                    name: 'apply',
+                    component: Apply
+                },
+                {
+                    path: 'index/search',
+                    name: 'search',
+                    component: Search
+                },
+                {
+                    path:'index/carousle/:id',
+                    name:'carousle',
+                    component:Carousle
+                }
+            ]
+        },
+        {
+          path: 'index/remind',
+          name: 'remind',
+          component: Remind
+        },
+        {
+          path: 'index/vip',
+          name: 'vip',
+          component: Vip
+        },
+        {
+          path: 'index/apply',
+          name: 'apply',
+          component: Apply
+        },
+        {
+          path: 'index/search',
+          name: 'search',
+          component: Search
+        },
+        {
+          path:'index/carousle/:id',
+          name:'carousle',
+          component:Carousle
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/message',
+          name: 'message',
+          component: Message
+        },
+        {
+          path: '/message/index',
+          name: 'messageIndex',
+          component: MessageIndex
+        },
+        {
+          path: '/message/detail/:id',
+          name: 'messageDetail',
+          component: MessageDetail
+        },
+        {
+          path: '/message/datumDetail/:id',
+          name: 'datumDetail',
+          component: MessageDatumDetail
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/integral',
+          name: 'integral',
+          component: IntegralIndex
+        },
+        {
+          path:'/inte/detail/:id',
+          name:'inteDetail',
+          component:InterDetail
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/article',
+          name: 'article',
+          component: ArticleIndex
+        },
+        {
+          path: '/article/detail/:id',
+          name: 'articleDetail',
+          component: ArticleDetail
+        },
+        {
+          path: '/article/user/:uid',
+          name: 'articleUser',
+          component: ArticleUser
+        },
+        {
+          path: '/article/list',
+          name: 'articleList',
+          component: ArticleList
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/question',
+          name: 'question',
+          component: QuestionIndex
+        },
+        {
+          path: '/question/detail/:id',
+          name: 'questionDetail',
+          component: QuestionDetail
+        },
+        {
+          path: '/question/list',
+          name: 'questionList',
+          component: QuestionList
+        },
+        {
+          path: '/question/edit/:id',
+          name: 'questionEdit',
+          component: QuestionEdit
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/user',
+          name: 'userIndex',
+          component: UserIndex
+        },
+        {
+          path: '/user/center',
+          name: 'userCenter',
+          component: UserCenter
+        }
+      ]
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/quzi/list',
+          name: 'quziList',
+          component: QuizList
+        },
+        {
+          path: '/quzi/edit/:id',
+          name: 'quziEdit',
+          component: QuizEdit,
+          meta: {
+            keepAlive: true
+          }
+        }
+      ]
+    }
+  ]
+})
