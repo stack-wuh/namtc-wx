@@ -148,8 +148,7 @@
 }
  .wrap-list span{
   display: inline-block;
-  /* width:5.8em; */
-  min-width:70px;
+  width:33%;
   height:3em;
   padding:.1em .5em;
   margin-top:1em;

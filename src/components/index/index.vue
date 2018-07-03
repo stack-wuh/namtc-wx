@@ -35,7 +35,7 @@
               </span>
               <p class="article-title">{{subItem.title}}</p>
               <p class="acticle-desc" style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;">{{subItem.content}}</p>
-              <p class="item-img-box">
+              <p v-if="subItem.img" class="item-img-box">
                 <img :src="subItem.img" alt="">
               </p>
               <div class="btn-list">
@@ -61,6 +61,9 @@
               </span>
               <p class="article-title">{{subItem.title}}</p>
               <p class="acticle-desc" style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;">{{subItem.content}}</p>
+              <p v-if="subItem.img" class="item-img-box">
+                <img :src="subItem.img" alt="">
+              </p>
               <div class="btn-list">
                 <span><img src="../../../static/imgs/icon-visite.png" alt="icon_visite"> {{subItem.browse}}</span>
                 <span><img src="../../../static/imgs/icon-ok-default.png" alt="icon_ok"> {{subItem.praised}}</span>
@@ -227,7 +230,8 @@ export default {
   color: #fff;
 }
 .wrapper{
-  height:83%;
+  /* height:83%; */
+  height:60%;
   overflow: hidden;
 }
 .scroller {

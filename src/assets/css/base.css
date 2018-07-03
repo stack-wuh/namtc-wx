@@ -88,17 +88,6 @@ img[alt='icon_message']{
   background-size: 100% 100%;
   z-index:10000;
 }
-/* img[alt='ok']{
-  transform: 
-}
-img[alt="like"]{
-  width: 11px;
-  height:10px;
-}
-img[alt='message']{
-  width:12px;
-  height:11px;
-} */
 /*色彩*/
 .active{
   font-weight: bold;
@@ -133,4 +122,7 @@ img[alt="roof"]{
 img[alt="share"]{
   width:20px;
   height:20px;
+}
+.father > .wrap{
+  padding:0 !important;
 }

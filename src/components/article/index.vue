@@ -54,36 +54,29 @@ import scroll from '../common/scroll'
       }
     },
     methods: {
-      getNewsList(isEmpty) {
-        this.showLoading = true;
-        this.apiPost('Index/article', {page: this.page}).then(res => {
-          const data = res;
-          if (isEmpty) {
-            this.list = [];
-            this.show = false
-          } else {
-            if(!data){
-              this.showLoading = false
-              this.scrollerStatus.pullupStatus = 'disabled'
-              return
-            }
-            if (data && data.length === 0) {
-              this.showLoading = false;
-              this.scrollerStatus.pullupStatus = 'disabled';
-            }
-          }
-        })
-      },
-      activated() {
-        this.$refs.scroller.reset()
-      },
-      selPullUp() {
-        if(this.isShow){
-          this.page++;
-          this.getNewsList(false)
+      loadMore(){
+        if(this.isShowMore){
+          this.page++
+          this.fetchData()
         }
       },
 
+      //获取数据
+      fetchData(){
+        this.showLoadingMore = true
+        this.apiPost('Index/article',{page:this.page}).then(res=>{
+            this.showLoadingMore = false
+            if(res){
+              this.list = this.list.concat(res)
+              if(res.length == 10){
+                this.isShowMore = true
+              }else{
+                this.isShowMore = false
+              }
+            }
+        })
+      },
+     
       jumpToOther(elem) {
         this.$router.push('/article/detail/' + elem.id)
       },
