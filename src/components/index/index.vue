@@ -1,6 +1,6 @@
 <template>
   <section class="wrap">
-    <div style="height:140px;">
+    <div :class="[isShowSwiper == 1 ? 'down_to_up' : isShowSwiper == 2 ? 'up_to_down' : '']" style="height:140px;">
       <swiper height="140px" dots-position="center" auto>
         <swiper-item v-for="(item,index) in banner" :key="index">
           <div @click="jumpToOther(5,item)" class="swiper-item">
@@ -17,8 +17,7 @@
       </div>
       <img @click="jumpToOther(3)" src="../../../static/img/icon-search@2x.png" alt="search" class="icon-search">
     </nav>
-    <div style="height:45px;"></div>
-    <scroll ref="wrapper" class="wrapper" :data="article" :pulldown="pulldown" @pulldown="fetchData">
+    <scroll ref="wrapper" :class="{'h80':isShowSwiper != 2}" :data="article" :pulldown="pulldown" @pulldown="fetchData">
       <div class="content" ref="content" @touchstart="touchStart" @touchend="touchEnd">
         <section  v-if="category == 1" class="item-list " v-for="(item,index) in list" :key="index">
           <div class="item-top" v-if="subIndex == 0" v-for="(subItem,subIndex) in item" :key="subIndex">
@@ -76,7 +75,7 @@
         <div v-if="!isShowMore"><load-more :show-loading="false" :tip="('没有更多啦')"></load-more></div>
       </div>
     </scroll>
-    <div @click="isactive = !isactive" class="circly default"  v-bind:class="{'trans-to-left':isactive,'trans-to-right':!isactive}">
+    <div class="circly default">
       <span  @click="jumpToOther(1)">问卷<br>调查</span>
     </div>
     <bottom class="nav"></bottom>
@@ -111,11 +110,13 @@ export default {
       showLoading: false,
       textLoading: "加载中...",
       isShowMore: false,
-      pulldown: false,
+      pulldown: true,
+      pullup:true,
       isactive:false,
       startY:0,
       endY:0,
-      banner:[]
+      banner:[],
+      isShowSwiper:-1, 
     };
   },
   methods: {
@@ -127,6 +128,12 @@ export default {
         this.isactive = true
       }else{
         this.isactive = false
+      }
+      if(this.startY < 100 && this.endY>150 && this.endY > this.startY){
+        this.isShowSwiper = 2
+      }
+      if(this.startY != this.endY && this.startY>150){
+        this.isShowSwiper = 1
       }
     },
     touchStart(e){
@@ -141,6 +148,7 @@ export default {
       }
     },
     fetchData() {
+      console.log('is ok')
       let _url = "";
       this.showLoading = true;
       _url = this.category == 1 ? "Index/indexCho" : "Index/indexFol";
@@ -206,6 +214,35 @@ export default {
 </script>
 
 <style scoped>
+@keyframes up_to_down {
+  from{
+    transform: translateY(-140px);
+    height:0;
+  }
+  to{
+    transform: translateY(0);
+    height:140px;
+  }
+}
+@keyframes down_to_up{
+  from{
+    transform: translateY(0);
+    height:140px;
+  }
+  to{
+    transform: translateY(-140px);
+    height:0;
+  }
+}
+.down_to_up{
+  animation: down_to_up .5s forwards linear;
+}
+.up_to_down{
+  animation: up_to_down .5s forwards linear;
+}
+.h80{
+  height:83% !important;
+}
 .item-img-box{
   width: 100%;
   text-align: center;
@@ -250,8 +287,9 @@ export default {
   margin-right: 1em;
 }
 .top-nav {
-  position: fixed;
-  top: 140px;
+  /* position: fixed; */
+  position: relative;
+  top: 0;
   left: 0;
   display: flex;
   justify-content: space-around;

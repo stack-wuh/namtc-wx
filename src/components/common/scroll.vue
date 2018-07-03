@@ -57,7 +57,7 @@ export default {
        */
       pulldown: {
         type: Boolean,
-        default: false
+        default: true
       },
       /**
        * 是否派发列表滚动开始的事件

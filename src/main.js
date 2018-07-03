@@ -35,8 +35,8 @@ window.axios = axios;
 window.store = store;
 window.Lockr = Lockr;
 window.wx = wx;
-window.PATH = "/api/";
-// window.PATH = "index.php/mobile/";
+// window.PATH = "/api/";
+window.PATH = "index.php/mobile/";
 
 const link = location.href.split('#')[0];
 window.imgUrl = 'http://bbs.namtc.com.cn/favicon.ico'
@@ -94,8 +94,8 @@ router.beforeEach((to, from, next) => {
       let nowUrl = window.location.href;
       let code = _g.getQueryParam(nowUrl).code;
       if (!code) {
-        // let href = encodeURIComponent("http://oa.namtc.com.cn/line.php");
-        let href = encodeURIComponent("http://oa.namtc.com.cn/code.php");
+        let href = encodeURIComponent("http://oa.namtc.com.cn/line.php");
+        // let href = encodeURIComponent("http://oa.namtc.com.cn/code.php");
         window.location.href =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8c62e8a800c6abbd&redirect_uri=" +
           href + "&response_type=code&scope=snsapi_userinfo&state=login#wechat_redirect";
